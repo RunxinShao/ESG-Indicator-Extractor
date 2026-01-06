@@ -208,21 +208,8 @@ def get_hierarchy_from_source(source: str) -> str:
         elif category in ["company_specific", "company"]:
             return "Company-specific"
 
-    # BACKWARD COMPATIBILITY: Support old folder names
-    if folder_name in ["gri", "ifrs", "tcfd", "pri", "unsdg"]:
-        return "Global"
-    elif folder_name in ["china", "india", "korea", "mexico", "singapore", "uk", "us", "vietnam", "japan"]:
-        return "National"
-    elif folder_name in ["company_specific", "company"]:
-        return "Company-specific"
-    elif folder_name in ["sasb"]:
-        return "Industry"
-    else:
-        if "local" in folder_name or "city" in folder_name or "municipal" in folder_name:
-            return "Local"
-        elif "industry" in folder_name or "sector" in folder_name:
-            return "Industry"
-        return "Global"
+    # Default fallback
+    return "Global"
 
 def make_metric_id(metric_name: str, hierarchy: str) -> str:
     base = normalize_metric_name(metric_name)
@@ -1248,7 +1235,7 @@ def run_pipeline(
     with open(out_dir / "company_unmatched.json", "w", encoding="utf-8") as f:
         json.dump(unmatched, f, ensure_ascii=False, indent=2)
 
-    print(f"\n📦 Done! Output folder: {out_dir}")
+    print(f"\nDone! Output folder: {out_dir}")
     print(f"   - final.xlsx (Catalog / CompanyValues / Unmatched)")
     print(f"   - catalog.json / company_matched.json / company_unmatched.json")
 
@@ -1260,7 +1247,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--standards",
         nargs="*",
-        default=["global/GRI", "global/PRI"],
+        default=["global/GRI", "global/PRI", "global/TCFD"],
         help="Standard folders (build master catalog from Excel + PDF)."
     )
     parser.add_argument(
