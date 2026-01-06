@@ -41,7 +41,7 @@ wheels/
 
 # Output files
 outputs/
-*.xlsx
+
 *.xls
 *.csv
 *.json
