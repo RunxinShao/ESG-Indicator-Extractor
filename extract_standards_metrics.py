@@ -383,6 +383,9 @@ def chunk_pages(pages: List[Dict[str, Any]], max_chars: int) -> List[Dict[str, A
 def extract_standard_metrics_from_chunk(llm: LLMClient, chunk_text: str, source: str) -> List[Dict[str, Any]]:
     prompt = f"""Extract ONLY directly quantifiable ESG metrics (single scalar KPIs) from the text.
 
+IMPORTANT: The input text may be in any language (Chinese, Korean, Spanish, etc.).
+Always output metric_name and definition in ENGLISH, regardless of input language.
+
 A KPI is KEEPABLE only if it can be reported as ONE numeric value (possibly with unit/type), e.g.:
 - total emissions (tCO2e)
 - energy consumption (MWh/GJ)
@@ -399,8 +402,8 @@ DO NOT extract:
 - disclosure titles that are not a KPI
 
 Return JSON array with:
-- metric_name
-- definition  (only what the KPI measures; no extra assumptions)
+- metric_name (in English)
+- definition (in English, only what the KPI measures; no extra assumptions)
 
 Return [] if none.
 
@@ -438,15 +441,19 @@ Text:
 def extract_company_metrics_from_chunk(llm: LLMClient, chunk_text: str, source: str) -> List[Dict[str, Any]]:
     prompt = f"""Extract ONLY measurable (quantitative) ESG metrics from this text.
 
+IMPORTANT: The input text may be in any language (Chinese, Korean, Spanish, etc.).
+Always output metric_name, definition, and evidence in ENGLISH, regardless of input language.
+Keep numeric values and units as-is (do not translate numbers).
+
 Each metric MUST have a numeric value. Do NOT extract policies or commitments.
 
 Return JSON array with fields:
-- metric_name
-- definition (what it measures)
-- value
+- metric_name (in English)
+- definition (in English, what it measures)
+- value (keep original number)
 - unit (or "")
 - period (or "")
-- evidence (≤20 words)
+- evidence (in English, ≤20 words)
 
 Return [] if none.
 
