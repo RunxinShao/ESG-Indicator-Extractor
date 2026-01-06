@@ -40,11 +40,13 @@ wheels/
 *~
 
 # Output files
+outputs/
 *.xlsx
 *.xls
 *.csv
 *.json
 !requirements.txt
+config.json
 
 # OS
 .DS_Store
