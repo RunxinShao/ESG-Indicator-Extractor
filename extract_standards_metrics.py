@@ -1280,9 +1280,9 @@ if __name__ == "__main__":
         help="KEEP threshold for strict KPI filter confidence (higher => fewer, cleaner)."
     )
     parser.add_argument(
-        "--match_use_llm",
+        "--no_llm_match",
         action="store_true",
-        help="Use LLM to pick the best catalog KPI among Top-K candidates."
+        help="Disable LLM matching, use rule-based matching instead (default: use LLM)."
     )
     parser.add_argument(
         "--match_conf",
@@ -1302,7 +1302,7 @@ if __name__ == "__main__":
         use_ollama=not args.use_openai,
         out_dir=args.out,
         keep_confidence_threshold=args.keep_conf,
-        match_use_llm=bool(args.match_use_llm),
+        match_use_llm=not args.no_llm_match,  # 默认用 LLM 匹配
         match_top_k=args.top_k,
         match_confidence_threshold=args.match_conf,
     )
